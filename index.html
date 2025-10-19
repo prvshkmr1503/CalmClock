@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CalmClock — Distraction-Free Study Timer</title>
+    <meta name="description" content="CalmClock is a distraction-free study timer with progress logs." />
+    <link rel="stylesheet" href="style/style.css" />
+</head>
+
+<body>
+    <noscript>Please enable JavaScript to use CalmClock.</noscript>
+
+    <header class="app-header" role="banner">
+        <h1 class="brand">CalmClock</h1>
+        <button id="openSettingsBtn" class="icon-btn" aria-label="Open settings" title="Settings">⚙️</button>
+    </header>
+
+    <main class="container" role="main">
+        <!-- Timer Card -->
+        <section class="timer-card" aria-labelledby="timer-heading">
+            <h2 id="timer-heading" class="visually-hidden">Focus Timer</h2>
+
+            <div class="session-meta">
+                <label for="sessionType" class="select-label">Session</label>
+                <select id="sessionType" aria-label="Session type">
+                    <option value="focus" selected>Focus</option>
+                    <option value="shortBreak">Short Break</option>
+                    <option value="longBreak">Long Break</option>
+                </select>
+                <span id="sessionCount" class="muted" aria-live="polite"></span>
+            </div>
+
+            <div id="timerDisplay" class="timer-display" aria-live="assertive" aria-atomic="true">
+                25:00
+            </div>
+
+            <div class="controls" role="group" aria-label="Timer controls">
+                <button id="startBtn" class="primary">Start</button>
+                <button id="pauseBtn" class="secondary" disabled>Pause</button>
+                <button id="resetBtn" class="ghost" disabled>Reset</button>
+            </div>
+
+            <div class="quick-presets" aria-label="Quick presets">
+                <button class="chip" data-min="15">15m</button>
+                <button class="chip" data-min="25">25m</button>
+                <button class="chip" data-min="45">45m</button>
+                <button class="chip" data-min="60">60m</button>
+            </div>
+        </section>
+
+        <!-- Progress Snapshot -->
+        <section class="stats" aria-labelledby="stats-heading">
+            <h2 id="stats-heading">Today</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Focus sessions</div>
+                    <div id="statSessions" class="stat-value">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total focus time</div>
+                    <div id="statMinutes" class="stat-value">0m</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Best streak</div>
+                    <div id="statStreak" class="stat-value">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Log -->
+        <section class="log" aria-labelledby="log-heading">
+            <div class="log-header">
+                <h2 id="log-heading">Progress Log</h2>
+                <div class="log-actions">
+                    <button id="exportLogsBtn" class="ghost" title="Export logs">Export</button>
+                    <button id="clearLogsBtn" class="ghost danger" title="Clear logs">Clear</button>
+                </div>
+            </div>
+
+            <div class="log-list" role="table" aria-label="Completed sessions">
+                <div class="log-row log-head" role="row">
+                    <span role="columnheader">When</span>
+                    <span role="columnheader">Type</span>
+                    <span role="columnheader">Duration</span>
+                    <span role="columnheader">Notes</span>
+                </div>
+                <div id="logBody" class="log-body" role="rowgroup">
+                    <!-- Filled by app.js -->
+                </div>
+            </div>
+
+            <form id="noteForm" class="note-form" aria-label="Add a note to the last session">
+                <label for="noteInput" class="visually-hidden">Note</label>
+                <input id="noteInput" type="text" placeholder="Add a quick note (optional)" />
+                <button type="submit" class="secondary">Save Note</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <dialog id="settingsDialog" aria-labelledby="settingsTitle">
+        <form method="dialog" class="settings-form">
+            <header class="dialog-header">
+                <h2 id="settingsTitle">Settings</h2>
+                <button id="closeSettingsBtn" class="icon-btn" aria-label="Close">✖</button>
+            </header>
+
+            <div class="settings-grid">
+                <label>
+                    Focus length (min)
+                    <input id="focusLen" type="number" min="1" max="180" value="25" />
+                </label>
+                <label>
+                    Short break (min)
+                    <input id="shortBreakLen" type="number" min="1" max="60" value="5" />
+                </label>
+                <label>
+                    Long break (min)
+                    <input id="longBreakLen" type="number" min="1" max="90" value="15" />
+                </label>
+                <label>
+                    Long break every (sessions)
+                    <input id="longBreakEvery" type="number" min="1" max="12" value="4" />
+                </label>
+                <label class="row">
+                    <input id="soundToggle" type="checkbox" checked />
+                    Play sound on finish
+                </label>
+                <label class="row">
+                    <input id="autoNextToggle" type="checkbox" />
+                    Auto-start next session
+                </label>
+            </div>
+
+            <menu class="dialog-actions">
+                <button value="cancel" class="ghost">Cancel</button>
+                <button id="saveSettingsBtn" value="default" class="primary">Save</button>
+            </menu>
+        </form>
+    </dialog>
+
+    <footer class="app-footer" role="contentinfo">
+        <small>© <span id="year"></span> CalmClock</small>
+    </footer>
+
+    <audio id="dingSound" preload="auto">
+        <source src="assets/sounds/ding.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script src="script/app.js" defer></script>
+</body>
+
+</html>
